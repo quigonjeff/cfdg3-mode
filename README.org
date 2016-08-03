@@ -1,0 +1,80 @@
+#+TITLE: Context Free Design Grammar Mode for Emacs
+#+AUTHOR: Jefferson O. Andrade
+#+EMAIL: quigonjeff@gmail.com
+#+OPTIONS: toc:nil
+
+This is an Emacs mode for editing [[http://www.contextfreeart.org/][Context Free Design Grammar]] files,
+aka CFDG files.
+
+This project was inspired by the =cfdg-mode= posted by Brent Sanders
+at the [[http://www.contextfreeart.org/phpbb/viewtopic.php?t=505#p1975][Context Free Art Forums]]. This project share no code with
+Mr. Sanders' mode, though. Therefore, any error are our own.
+
+* Introduction
+
+[[http://www.contextfreeart.org/index.html][/Context Free Art/]] is am amazing program that generates images from
+[[https://en.wikipedia.org/wiki/Context-free_grammar][context-free grammars]], defined in /Context Free Design Grammar/
+syntax.
+
+I am starting to play with CFDG and wanted syntax highlight for my
+scripts, but I could not find an editor with support for CFDG
+Version 3. So I decided to give it a try and write my on Emacs mode
+for it. It is the first time I try to do such a thing, so do not
+expect much, but if you find this mode useful, please be welcome to
+use it -- at your own risk, notice that right now, this is *pre-alpha*
+software :-).
+
+* Quick Intall
+
+Put the =cfdg3-mode.el= file into your Emacs load path and add the
+following into your Emacs init file (=~/.emacs=, =~/.emacs.d/init.el=,
+etc.)
+
+#+BEGIN_SRC emacs-lisp
+(require 'cfdg3-mode)
+(autoload 'cfdg3-mode "cfdg3-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.cfdg\\'" . cfdg3-mode))
+#+END_SRC
+
+
+* To Do
+
+As Mr. Xah Lee wrote in his [[http://ergoemacs.org/emacs/elisp_syntax_coloring.html][tutorial on writing Emacs's major modes]]: 
+
+#+BEGIN_QUOTE
+A full featured language mode should also handle comments,
+indentation, keyword completion, function documentation lookup,
+function template insertion, graphical menu, supporting emacs's
+customize-group scheme, or any other features that may be useful for
+coding the language your mode is designed for.
+#+END_QUOTE
+
+So, we wish for the future:
+
+- Handle comments.
+- Handle indentations.
+- Keyword completion.
+- Function documentation search.
+- Graphical menu.
+- Support for Emacs' customize-group scheme.
+- Rendering and viewing of images in Emacs.
+
+# References to most of the topics above can be found at the Xah Lee's
+# Ergoemacs, [[http://ergoemacs.org/emacs/elisp_syntax_coloring.html][How to Write a Emacs Major Mode for Syntax Coloring]], and
+# at Wilfred Hughes::Blog, [[http://www.wilfred.me.uk/blog/2015/03/19/adding-a-new-language-to-emacs/][Adding A New Language to Emacs]].
+
+* Known Issues
+
+- Multiline comments are not highlighted properly.
+
+- The =transform= shape adjustment is not highlighted properly. This
+  is due to a conflict with the =transform= control structure.
+
+- The =if= function is note highlighted properly. This is due to a
+  conflict with the =if= control structure.
+
+* The End                                                          :noexport:
+
+# Local Variables:
+# ispell-local-dictionary: "english"
+# End:
