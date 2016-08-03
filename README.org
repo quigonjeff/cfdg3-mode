@@ -1,0 +1,5 @@
+#+TITLE: Context Free Design Grammar Mode for Emacs
+#+AUTHOR: Jefferson O. Andrade
+
+This is an Emacs mode for editing [[http://www.contextfreeart.org/][Context Free Design Grammar]] files,
+aka CFDG files.
