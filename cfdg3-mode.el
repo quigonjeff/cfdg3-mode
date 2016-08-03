@@ -2,11 +2,18 @@
 
 ;; Author: Jefferson O. Andrade <quigonjeff@gmail.com>
 ;; Keywords: languages; context free; cfdg; major mode;
-;; Version: 0.1.0
+;; Version: 0.1.0 -- see [[http://semver.org/spec/v2.0.0.html]]
+
+;; This file is not part of GNU Emacs.
+
+;;; License:
+
+;; You can redistribute this program and/or modify it under the terms
+;; of the GNU General Public License version 3.
 
 ;;; Commentary:
 
-;; Major mode for editing Context-Free Design Grammar version 2 files,
+;; Major mode for editing Context-Free Design Grammar version 3 files,
 ;; usually ending with '.cfdg'.
 
 ;; This package provides the following features:
@@ -14,23 +21,12 @@
 
 ;;; Installation:
 
-;;  put this file into your load path and the following into your ~/.emacs:
+;;  Put this file into your load path and the following into your ~/.emacs:
 ;;    (require 'cfdg3-mode)
-;;    (autoload `cfdg3-mode "cfdg3-mode" nil t)
+;;    (autoload 'cfdg3-mode "cfdg3-mode" nil t)
 ;;    (add-to-list 'auto-mode-alist '("\\.cfdg\\'" . cfdg3-mode))
 
 ;;; Code:
-
-
-(defvar cfdg3-mode-hook nil "Hook variable for `cfdg3-mode'.")
-
-
-(defvar cfdg3-mode-map
-  (let ((map (make-keymap)))
-    ;; (define-key map "\C-j" 'newline-and-indent)
-    map)
-  "Keymap for CFDG3 major mode.")
-
 
 ;; Define the several categories of keywords.
 (defvar cfdg3-keywords1
@@ -38,9 +34,10 @@
 (defvar cfdg3-keywords2
   '("if" "else" "switch" "case" "loop" "finally" "transform" "clone"))
 (defvar cfdg3-config-vars
-  '("AllowOverlap" "Alpha" "Background" "BorderDynamic" "BorderFixed"
-    "Color" "ColorDepth" "Frame" "FrameTime" "Impure" "MaxNatural"
-    "MinimumSize" "Size" "Symmetry" "Tile" "Time"))
+  '("CF::AllowOverlap" "CF::Alpha" "CF::Background" "CF::BorderDynamic"
+    "CF::BorderFixed" "CF::Color" "CF::ColorDepth" "CF::Frame"
+    "CF::FrameTime" "CF::Impure" "CF::MaxNatural" "CF::MinimumSize"
+    "CF::Size" "CF::Symmetry" "CF::Tile" "CF::Time"))
 (defvar cfdg3-flags
   '("CF::None" "CF::ArcCW" "CF::ArcLarge" "CF::Continuous" "CF::Align"
     "CF::EvenOdd" "CF::IsoWidth" "CF::MiterJoin" "CF::RoundJoin"
@@ -69,10 +66,11 @@
     "MOVEREL" "LINEREL" "ARCREL" "CURVEREL"
     "CLOSEPOLY" "STROKE" "FILL"))
 
-
 ;; Generate regexps for each keyword category.
 (defvar cfdg3-keywords-re
-  (regexp-opt (append cfdg3-keywords1 cfdg-keywords2) 'words))
+  (regexp-opt (append cfdg3-keywords1 cfdg3-keywords2) 'words))
+(defvar cfdg3-config-vars-re
+  (regexp-opt cfdg3-config-vars 'words))
 (defvar cfdg3-constants-re
   (regexp-opt cfdg3-flags 'words))
 (defvar cfdg3-types-re
@@ -81,14 +79,37 @@
   (regexp-opt (append cfdg3-primitives cfdg3-path-operations) 'words))
 (defvar cfdg3-functions-re
   (regexp-opt cfdg3-predef-functions 'words))
+(defvar cfdg3-singleline-comment-re "//.*$")
+;; (defvar cfdg3-multiline-comment-re "/\\*\\([^\\*]\\|\\(\\*[^/]\\)\\)*\\*/")
 
-(defconst cfdg3-font-lock-keywords-1
-  `((,cfdg3-keywords-re . font-lock-keyword-face)
-    (,cfdg3-constants-re . font-lock-constant-face)
+(defconst cfdg3-font-lock-defaults
+  `((,cfdg3-singleline-comment-re . font-lock-comment-face)
+    ;; (,cfdg3-multiline-comment-re . font-lock-comment-face)
+    (,cfdg3-keywords-re . font-lock-keyword-face)
     (,cfdg3-types-re . font-lock-type-face)
     (,cfdg3-builtins-re . font-lock-builtin-face)
-    (,cfdg3-functions-re . font-lock-function-name-face)))
+    (,cfdg3-config-vars-re . font-lock-builtin-face)
+    (,cfdg3-functions-re . font-lock-function-name-face)
+    (,cfdg3-constants-re . font-lock-constant-face)
+    ))
 
+(defvar cfdg3-tab-width 4 "Default CFDG mode tab width.")
+
+;; define-derived-mode variant parent name docstring keyword-args… body…
+(define-derived-mode cfdg3-mode fundamental-mode
+  "CFDG"
+  "Major mode for editing Context-Free Design Grammar version 3 files."
+  (setq-mode-local cfdg3-mode
+                   font-lock-defaults '((cfdg3-font-lock-defaults))
+                   tab-width cfdg3-tab-width
+                   comment-multi-line nil
+                   comment-start "/*"
+                   comment-end "/*"
+                   comment-start-skip "/\\*+[ \t]*"
+                   comment-end-skip "[ \t]*\\*+/"
+                   ))
+
+(add-to-list 'auto-mode-alist '("\\.cfdg\\'" . cfdg3-mode))
 
 (provide 'cfdg3-mode)
 ;;; cfdg3-mode ends here
