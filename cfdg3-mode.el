@@ -104,7 +104,7 @@
                    tab-width cfdg3-tab-width
                    comment-multi-line nil
                    comment-start "/*"
-                   comment-end "/*"
+                   comment-end "*/"
                    comment-start-skip "/\\*+[ \t]*"
                    comment-end-skip "[ \t]*\\*+/"
                    ))
